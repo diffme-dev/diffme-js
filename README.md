@@ -1,11 +1,14 @@
 ## Diffme JS
 
+[![Publish to NPM only from Master branch](https://github.com/diffme-dev/diffme-js/actions/workflows/publish.yml/badge.svg)](https://github.com/diffme-dev/diffme-js/actions/workflows/publish.yml)
+
 This SDK is to interact with the diffme API and track changes/deltas for your documents/database rows. 
 
 You can use this SDK to easily communicate with a hosted diffme server as it provides a clean wrapper around 
 the snapshot and change APIs. 
 
 The library also has full TS support for those of you that like that :)
+
 
 ```typescript
 import diffmeSDK from "diffme"
@@ -17,7 +20,7 @@ const diffme = diffmeSDK({
 
 const document = { name: "Chaga", price: 10.50, id: "1"}
 
-diffme.snapshots.created({
+diffme.snapshots.create({
     reference_id: document.id,
     data: document,
     editor: "andrew",
