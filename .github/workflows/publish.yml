@@ -1,4 +1,4 @@
-name: Publish to NPM only from main branch
+name: NPM publish
 on:
     push:
         branches:
