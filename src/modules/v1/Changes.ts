@@ -15,6 +15,14 @@ class Changes extends Module {
         super(request);
     }
 
+    list = async (
+        query: any
+    ): Promise<FailureOrSuccess<Error, ChangeSearchResponse>> =>
+        this.request.get({
+            route: `/changes`,
+            query,
+        });
+
     search = async (): Promise<FailureOrSuccess<Error, ChangeSearchResponse>> =>
         this.request.get({
             route: `/changes/search`,
@@ -24,7 +32,7 @@ class Changes extends Module {
         referenceId: string
     ): Promise<FailureOrSuccess<Error, ChangeForReferenceId>> =>
         this.request.get({
-            route: `/changes/${referenceId}`,
+            route: `/changes/references/${referenceId}`,
         });
 }
 

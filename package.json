@@ -1,6 +1,6 @@
 {
   "name": "diffme",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "Official SDK for diffme (supports TS!)",
   "main": "build/index.js",
   "types": "build/index.d.ts",
