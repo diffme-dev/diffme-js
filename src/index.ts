@@ -6,10 +6,14 @@ type ClientParams = {
     domain: string;
 };
 
-const _client = ({ version = "v1", domain, apiKey }: ClientParams) => {
+const _client = ({
+    version = "v1",
+    domain,
+    apiKey,
+}: ClientParams): ApiModuleV1 => {
     switch (version) {
         case "v1": {
-            return new ApiModuleV1({ domain, apiKey });
+            return new ApiModuleV1({ domain, apiKey, version });
         }
         default: {
             throw new Error(
