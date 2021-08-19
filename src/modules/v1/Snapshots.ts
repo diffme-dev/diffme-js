@@ -15,18 +15,21 @@ class Snapshots extends Module {
         super(request);
     }
 
-    create = async (): Promise<
-        FailureOrSuccess<Error, SnapshotCreatedResponse>
-    > =>
-        this.request.get({
-            route: `/changes/search`,
+    create = async (
+        data: any
+    ): Promise<FailureOrSuccess<Error, SnapshotCreatedResponse>> =>
+        this.request.post<SnapshotCreatedResponse>({
+            route: `/snapshots`,
+            data,
         });
 
-    forReferenceId = async (): Promise<
-        FailureOrSuccess<Error, SnapshotsForReferenceResponse>
-    > =>
-        this.request.get({
-            route: `/changes/search`,
+    forReferenceId = async (
+        referenceId: string,
+        query: any
+    ): Promise<FailureOrSuccess<Error, SnapshotsForReferenceResponse>> =>
+        this.request.get<SnapshotsForReferenceResponse>({
+            route: `/snapshots/${referenceId}`,
+            query,
         });
 }
 
