@@ -4,23 +4,26 @@ import { failure, FailureOrSuccess, success } from "../core";
 type Dependencies = {
     domain: string;
     apiKey: string;
+    version: string
 };
 
-type RequestParams = {
+type RequestParams<QueryT, DataT, HeaderT> = {
     route: string;
-    query: any;
-    data: any;
-    headers: any;
+    query?: QueryT;
+    data?: DataT;
+    headers?: HeaderT;
 };
 
 class Request {
     private readonly domain: string;
     private readonly apiKey: string;
+    private readonly version: string;
     private readonly client: AxiosInstance;
 
-    constructor({ domain, apiKey }: Dependencies) {
+    constructor({ domain, apiKey, version }: Dependencies) {
         this.domain = domain;
         this.apiKey = apiKey;
+        this.version = version;
         this.client = axios.create({
             baseURL: domain,
             headers: {
@@ -29,15 +32,15 @@ class Request {
         });
     }
 
-    getDomain() {
+    getDomain(): string {
         return this.domain;
     }
 
-    getApiKey() {
+    getApiKey(): string  {
         return this.apiKey;
     }
 
-    getHeaders = (headers: any) => {
+    getHeaders = <HeaderT>(headers: HeaderT): any => {
         return {
             ...headers,
             Authorization: "Bearer " + this.apiKey,
@@ -45,13 +48,15 @@ class Request {
         };
     };
 
-    get = async <ResponseT>({
+    getRoute = (route: string): string => `${this.version}/${route}`
+
+    get = async <ResponseT, QueryT = unknown, DataT = unknown, HeaderT = unknown >({
         route,
         headers,
         query,
-    }: RequestParams): Promise<FailureOrSuccess<Error, ResponseT>> => {
+    }: RequestParams<QueryT, DataT, HeaderT>): Promise<FailureOrSuccess<Error, ResponseT>> => {
         try {
-            const response = await this.client.get<ResponseT>(route, {
+            const response = await this.client.get<ResponseT>(this.getRoute(route), {
                 headers: this.getHeaders(headers),
                 params: query,
             });
@@ -62,14 +67,14 @@ class Request {
         }
     };
 
-    patch = async <ResponseT>({
+    patch = async <ResponseT, QueryT = unknown, DataT = unknown, HeaderT = unknown >({
         route,
         headers,
         query,
         data,
-    }: RequestParams): Promise<FailureOrSuccess<Error, ResponseT>> => {
+    }: RequestParams<QueryT, DataT, HeaderT>): Promise<FailureOrSuccess<Error, ResponseT>> => {
         try {
-            const response = await this.client.patch<ResponseT>(route, data, {
+            const response = await this.client.patch<ResponseT>(this.getRoute(route), data, {
                 headers: this.getHeaders(headers),
                 params: query,
             });
@@ -80,13 +85,13 @@ class Request {
         }
     };
 
-    post = async <ResponseT>({
+    post = async <ResponseT, QueryT = unknown, DataT = unknown, HeaderT = unknown >({
         route,
         headers,
         query,
-    }: RequestParams): Promise<FailureOrSuccess<Error, ResponseT>> => {
+    }: RequestParams<QueryT, DataT, HeaderT>): Promise<FailureOrSuccess<Error, ResponseT>> => {
         try {
-            const response = await this.client.post<ResponseT>(route, {
+            const response = await this.client.post<ResponseT>(this.getRoute(route), {
                 headers: this.getHeaders(headers),
                 params: query,
             });

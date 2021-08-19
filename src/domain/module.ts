@@ -1,4 +1,4 @@
-import { Request } from "../utils/Request";
+import { Request } from "../shared/Request";
 
 export class Module {
     public request: Request;
