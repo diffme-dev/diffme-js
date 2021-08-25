@@ -1,10 +1,11 @@
 import axios, { AxiosInstance } from "axios";
 import { failure, FailureOrSuccess, success } from "../core";
+import * as qs from "query-string";
 
 type Dependencies = {
     domain: string;
     apiKey: string;
-    version: string
+    version: string;
 };
 
 type RequestParams<QueryT, DataT, HeaderT> = {
@@ -29,6 +30,9 @@ class Request {
             headers: {
                 Authorization: "Bearer " + apiKey,
             },
+            paramsSerializer: (params) => {
+                return qs.stringify(params);
+            },
         });
     }
 
@@ -36,7 +40,7 @@ class Request {
         return this.domain;
     }
 
-    getApiKey(): string  {
+    getApiKey(): string {
         return this.apiKey;
     }
 
@@ -48,18 +52,28 @@ class Request {
         };
     };
 
-    getRoute = (route: string): string => `${this.version}/${route}`
+    getRoute = (route: string): string => `${this.version}/${route}`;
 
-    get = async <ResponseT, QueryT = unknown, DataT = unknown, HeaderT = unknown >({
+    get = async <
+        ResponseT,
+        QueryT = unknown,
+        DataT = unknown,
+        HeaderT = unknown
+    >({
         route,
         headers,
         query,
-    }: RequestParams<QueryT, DataT, HeaderT>): Promise<FailureOrSuccess<Error, ResponseT>> => {
+    }: RequestParams<QueryT, DataT, HeaderT>): Promise<
+        FailureOrSuccess<Error, ResponseT>
+    > => {
         try {
-            const response = await this.client.get<ResponseT>(this.getRoute(route), {
-                headers: this.getHeaders(headers),
-                params: query,
-            });
+            const response = await this.client.get<ResponseT>(
+                this.getRoute(route),
+                {
+                    headers: this.getHeaders(headers),
+                    params: query,
+                }
+            );
 
             return success(response.data);
         } catch (err) {
@@ -67,17 +81,28 @@ class Request {
         }
     };
 
-    patch = async <ResponseT, QueryT = unknown, DataT = unknown, HeaderT = unknown >({
+    patch = async <
+        ResponseT,
+        QueryT = unknown,
+        DataT = unknown,
+        HeaderT = unknown
+    >({
         route,
         headers,
         query,
         data,
-    }: RequestParams<QueryT, DataT, HeaderT>): Promise<FailureOrSuccess<Error, ResponseT>> => {
+    }: RequestParams<QueryT, DataT, HeaderT>): Promise<
+        FailureOrSuccess<Error, ResponseT>
+    > => {
         try {
-            const response = await this.client.patch<ResponseT>(this.getRoute(route), data, {
-                headers: this.getHeaders(headers),
-                params: query,
-            });
+            const response = await this.client.patch<ResponseT>(
+                this.getRoute(route),
+                data,
+                {
+                    headers: this.getHeaders(headers),
+                    params: query,
+                }
+            );
 
             return success(response.data);
         } catch (err) {
@@ -85,16 +110,26 @@ class Request {
         }
     };
 
-    post = async <ResponseT, QueryT = unknown, DataT = unknown, HeaderT = unknown >({
+    post = async <
+        ResponseT,
+        QueryT = unknown,
+        DataT = unknown,
+        HeaderT = unknown
+    >({
         route,
         headers,
         query,
-    }: RequestParams<QueryT, DataT, HeaderT>): Promise<FailureOrSuccess<Error, ResponseT>> => {
+    }: RequestParams<QueryT, DataT, HeaderT>): Promise<
+        FailureOrSuccess<Error, ResponseT>
+    > => {
         try {
-            const response = await this.client.post<ResponseT>(this.getRoute(route), {
-                headers: this.getHeaders(headers),
-                params: query,
-            });
+            const response = await this.client.post<ResponseT>(
+                this.getRoute(route),
+                {
+                    headers: this.getHeaders(headers),
+                    params: query,
+                }
+            );
 
             return success(response.data);
         } catch (err) {
